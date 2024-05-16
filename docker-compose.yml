@@ -1,0 +1,6 @@
+services:
+  user:
+    build: .
+    image: luxayo/user:latest
+    ports:
+      - "3000:3000"

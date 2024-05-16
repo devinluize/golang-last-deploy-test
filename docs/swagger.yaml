@@ -1,0 +1,193 @@
+basePath: /v1
+definitions:
+  payloads.LoginRequestPayloads:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  payloads.RegisterRequest:
+    properties:
+      password:
+        type: string
+      user_email:
+        type: string
+      user_name:
+        type: string
+      user_role_id:
+        type: integer
+    type: object
+  payloads.Respons:
+    properties:
+      data: {}
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+  request.BinningHeaderRequest:
+    properties:
+      COMPANY_CODE:
+        type: string
+      PO_DOC_NO:
+        type: string
+    type: object
+  response.BinningDetailResponses:
+    properties:
+      binDocNo:
+        type: string
+      binLineNo:
+        type: string
+      caseNo:
+        type: string
+      grpoQty:
+        type: integer
+      itemCode:
+        type: string
+      locCode:
+        type: string
+      poLineNo:
+        type: string
+    type: object
+  response.BinningHeaderResponses:
+    properties:
+      companyCode:
+        type: string
+      item:
+        items:
+          $ref: '#/definitions/response.BinningDetailResponses'
+        type: array
+      poDocNo:
+        type: string
+      whscode:
+        type: string
+      whsgroup:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: dev.ops@indomobil.com
+    name: Indomobil
+    url: https://github.com/IMSIDevOps
+  description: DMS User Service Architecture
+  license:
+    name: MIT
+    url: https://github.com/IMSIDevOps/-/blob/main/LICENSE
+  termsOfService: http://swagger.io/terms/
+  title: DMS User Service
+  version: "1.0"
+paths:
+  /api/binning/getAll:
+    post:
+      consumes:
+      - application/json
+      description: Get Binning List By Header
+      parameters:
+      - description: Insert Header Request
+        in: body
+        name: request
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/request.BinningHeaderRequest'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.BinningHeaderResponses'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Show An Binning List
+      tags:
+      - Binning
+  /auth/loginAuth:
+    post:
+      consumes:
+      - application/json
+      description: Login With User
+      parameters:
+      - description: Insert Header Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.LoginRequestPayloads'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payloads.Respons'
+      summary: Login With User
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: REST API User
+      parameters:
+      - description: Insert Register Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/payloads.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payloads.Respons'
+      summary: Register User
+      tags:
+      - Auth
+  /user/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: REST API User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payloads.Respons'
+      security:
+      - BearerAuth: []
+      summary: Find User By ID
+      tags:
+      - User Controller
+  /user/username/{username}:
+    get:
+      consumes:
+      - application/json
+      description: REST API User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/payloads.Respons'
+      security:
+      - BearerAuth: []
+      summary: Find User By ID
+      tags:
+      - User Controller
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
